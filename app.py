@@ -12,6 +12,15 @@ st.set_page_config(page_title="JSL Stainless Steel Grade Selector", layout="wide
 @st.cache_data
 def load_data():
     df = pd.read_csv("grades.csv")
+    # Force numeric columns to numeric, coercing any stray text to NaN
+    numeric_cols = [
+        "Ni_min", "Ni_max", "Cr_min", "Cr_max", "Mo_min", "Mo_max",
+        "N_min", "N_max", "Cu_min", "Cu_max", "UTS_MPa_min", "YS_MPa_min",
+        "EL_pct_min", "Max_Service_Temp_C", "PREN_approx",
+    ]
+    for col in numeric_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
     return df
 
 df = load_data()
